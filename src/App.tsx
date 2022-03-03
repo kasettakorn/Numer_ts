@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { BookFilled, CaretDownFilled, FacebookFilled } from '@ant-design/icons';
 import { Router, Routes, Route, Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { Bisection } from './calculate/Root of equation/';
+import { Bisection } from './calculation/Root of equation';
 
 const { Header, Content, Footer } = Layout;
 export default function App() {
