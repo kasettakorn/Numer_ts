@@ -25,14 +25,15 @@ function Bisection()  {
         XL: 0,
         XR: 0
     });
+    const [output, setOutput] = useState<IOutput | null>(null);
     const [showOutput, setShowOutput] = useState(false);
     const [showGraph, setShowGraph] = useState(false);
-
         
     const bisection = () => {
+        outputTable = []
 
         const { FX, XL, XR } = input;
-        
+
         var increaseFunction : Boolean = false;
         var xl = XL, xr = XR
         var xm = 0;
@@ -118,9 +119,9 @@ function Bisection()  {
             <div className="row">
                 <div className="col offset-md-1">
                 {showOutput &&
-                    <Table rowKey={"i"} pagination={{defaultPageSize: 5}} dataSource={outputTable} bordered>
+                    <Table size='small' rowKey={"i"} pagination={{defaultPageSize: 5}} dataSource={outputTable} bordered>
                         {columns.map(column => {
-                            return <Table.Column title={column.title} dataIndex={column.dataIndex} key={column.key} align='center' />
+                            return <Table.Column title={column.title} dataIndex={column.dataIndex} key={column.key} align='left' />
                         })}
                        
                     </Table>
