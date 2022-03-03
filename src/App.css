@@ -2,6 +2,15 @@
 
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
 
+@font-face {
+	font-family: "Kanit";
+	src: url("./fonts/Kanit/Kanit-Light.ttf");
+}
+
+* {
+    font-family: 'Kanit', sans-serif;
+}
+
 .fa-2x {
     font-size: 2em;
 }

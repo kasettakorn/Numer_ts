@@ -1,111 +1,134 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Card, Input, Button, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { error, func } from '../../services';
 import Graph from '../../components/Graph.component';
+import { columns } from '../../constants';
 
 interface IInput {
-    fx: string | math.MathExpression,
-    xl: Number | string,
-    xr: Number | string
+    FX: math.MathExpression, 
+    XL: number,
+    XR: number
+}
+interface IOutput {
+    i: number,
+    XL: number | string,
+    XR: number | string,
+    X: number | string,
+    Error: number | string
 }
 
-interface HandleChangeInterface {
-    target: HTMLInputElement;
-  }
-
+var outputTable : IOutput[] = []
 function Bisection()  {
-    const [input, setInput] = useState<IInput | null>(null);
+    const [input, setInput] = useState<IInput>({
+        FX: "",
+        XL: 0,
+        XR: 0
+    });
     const [showOutput, setShowOutput] = useState(false);
     const [showGraph, setShowGraph] = useState(false);
-    
-    const bisection = (x1 : Number, x2 : Number) => {
-        // var increaseFunction = false;
-        // var xm = 0;
-        // var sum = 0;
-        // var n = 0;
-        // var data : any
-        // data['xl'] = []
-        // data['xr'] = []
-        // data['x'] = []
-        // data['error'] = []
-        // if (func(fx, xl) < func(this.state.fx, xr)) {
+
+        
+    const bisection = () => {
+
+        const { FX, XL, XR } = input;
+        
+        var increaseFunction : Boolean = false;
+        var xl = XL, xr = XR
+        var xm = 0;
+        var sum = 0;
+
+        // if (func({fx: fx, X: xm.toString()}) < func({fx: fx, X: xr.toString()})) {
         //     increaseFunction = true;
         // }
 
-        // do {
-        //     xm = (xl + xr) / 2;
-        //     if (func(this.state.fx, xm) * func(this.state.fx, xr) < 0) {
-        //         sum = error(xm, xr);
-        //         if (increaseFunction) {
-        //             xl = xm;
-        //         }
-        //         else {
-        //             xr = xm;
-        //         }
+        do {
+            xm = (xl + xr) / 2;
+            
+            if (func({fx: FX, X: xm.toString()}) * func({fx: FX, X: xr.toString()}) < 0) {
+                sum = error({xnew: xm, xold: xr});
+                // if (increaseFunction) {
+                    xl = xm;
+                // }
+                // else {
 
-        //     }
-        //     else {
-        //         sum = error(xm, xl);
-        //         if (increaseFunction) {
-        //             xr = xm;
-        //         }
-        //         else {
-        //             xl = xm;
-        //         }
-        //     }
-        //     data['xl'][n] = xl;
-        //     data['xr'][n] = xr;
-        //     data['x'][n] = xm.toFixed(8);
-        //     data['error'][n] = Math.abs(sum).toFixed(8);
-        //     n++;
-        // } while (Math.abs(sum) > 0.000001);
-        // this.createTable(data['xl'], data['xr'], data['x'], data['error']);
-        // this.setState({
-        //     showOutputCard: true,
-        //     showGraph: true,
+                // }
 
-        // })
+            }
+            else {
+                sum = error({xnew: xm, xold: xl});
+                // if (increaseFunction) {
+                    xr = xm
+                // }
+                // else {
+
+                // }
+            }
+        
+            outputTable.push({
+                i: outputTable.length+1,
+                XL: xl.toFixed(5),
+                XR: xr.toFixed(5),
+                X: xm.toFixed(8),
+                Error: Math.abs(sum).toFixed(8)
+            })
+        } while (Math.abs(sum) > 0.000001);
+
         setShowOutput(true);
         setShowGraph(true);
-
-
     }
 
     return (
         <div style={{ background: "#FFFF", padding: "30px" }}>
             <h2 style={{ color: "black", fontWeight: "bold" }}>Bisection</h2>
             <div className="row">
-                <div className="col-4">
+                <div className="offset-md-1 col-4">
                     <Card
                         bordered={true}
                         style={{ background: "black", color: "#FFFFFFFF" }}
                      
                         id="inputCard"
                     >
-                        <h3 style={{color:"white"}}>f(x)</h3><Input size="large" name="fx"></Input>
-                        <h3 style={{color:"white"}}>X<sub>L</sub></h3><Input size="large" name="xl" ></Input>
-                        <h3 style={{color:"white"}}>X<sub>R</sub></h3><Input size="large" name="xr" ></Input><br /><br />
-                        <Button block type="primary" id="submit_button" onClick={() => bisection(1.5, 2)}>Submit</Button>
+                        <h3 style={{color:"white"}}>f(x)</h3><Input size="middle" name="fx" onChange={(e) => {
+
+                            setInput({
+                                ...input,
+                                FX: e.target.value
+                            })
+                        }}></Input>
+                        <h3 style={{color:"white"}}>X<sub>L</sub></h3><Input size="middle" name="xl" onChange={(e) => {
+                            setInput({
+                                ...input,
+                                XL: Number(e.target.value)
+                            })
+                        }}></Input>
+                        <h3 style={{color:"white"}}>X<sub>R</sub></h3><Input size="middle" name="xr" onChange={(e) => {
+                            setInput({
+                                ...input,
+                                XR: Number(e.target.value)
+                            })
+                        }}></Input><br /><br />
+                        <Button block type="primary" id="submit_button" onClick={() => bisection()}>Submit</Button>
                     </Card>
                 </div>
-                <div className="col">
-                    {showGraph && <Graph fx={"x^4-13"} title="Bisection Method" />}
+                <div className="col-6 offset-md-1">
+                    {showGraph && <Graph fx={input.FX} title="Bisection Method" />}
                 </div>
             </div>
             <div className="row">
+                <div className="col offset-md-1">
                 {showOutput &&
-                    <Card
-                        title={"Output"}
-                        bordered={true}
-                        id="outputCard"
-                    >
-                        {/* <Table pagination={{defaultPageSize: 5}} columns={columns} dataSource={dataInTable} bodyStyle={{ fontWeight: "bold", fontSize: "18px", color: "black" }}></Table> */}
-                    </Card>
-                }
+                    <Table rowKey={"i"} pagination={{defaultPageSize: 5}} dataSource={outputTable} bordered>
+                        {columns.map(column => {
+                            return <Table.Column title={column.title} dataIndex={column.dataIndex} key={column.key} align='center' />
+                        })}
+                       
+                    </Table>
+                }                    
+                </div>
+
             </div>
         </div>
-
     );
 }
 

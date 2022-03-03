@@ -2,7 +2,7 @@ import math, { compile, derivative } from 'mathjs';
 var Algebrite = require('algebrite');
 
 interface IFunc {
-    fx: string,
+    fx: string | math.MathExpression,
     X: string
 }
 interface IFuncDiff {
@@ -25,7 +25,7 @@ const func = ({ fx, X }: IFunc) => {
     let scope = { x: parseFloat(X) }; //f(x) ; x=input
     return expr.evaluate(scope);
 }
-const funcDiff = ({ fx, X }: IFunc) => {
+const funcDiff = ({ fx, X }: IFuncDiff) => {
     var expr = derivative(fx, 'x');
     let scope = { x: parseFloat(X) };
     return expr.evaluate(scope);
