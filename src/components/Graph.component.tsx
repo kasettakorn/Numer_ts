@@ -1,6 +1,6 @@
 import React from 'react'
 import math, { range, compile } from 'mathjs';
-import Plot from 'react-plotly.js';
+import PlotlyChart from 'react-plotlyjs-ts';
 
 interface GraphProp {
     fx: math.MathExpression,
@@ -8,21 +8,41 @@ interface GraphProp {
 }
 
 export default function Graph(props : GraphProp) {
-    let { fx, title } = props;
-
+    const data = [
+        {
+            marker: {
+                color: 'rgb(16, 32, 77)'
+            },
+            type: 'scatter',
+            x: [1, 2, 3],
+            y: [6, 2, 3]
+        },
+        {
+            name: 'bar chart example',
+            type: 'bar',
+            x: [1, 2, 3],
+            y: [6, 2, 3],
+        }
+    ];
+    const layout = {
+        annotations: [
+            {
+                text: 'simple annotation',
+                x: 0,
+                xref: 'paper',
+                y: 0,
+                yref: 'paper'
+            }
+        ],
+        title: 'simple example',
+        xaxis: {
+            title: 'time'
+        },
+    };
     return (
-        <Plot
-            data={[
-                {
-                    x: range(-10, 10, 0.5).toArray(),
-                    y: range(-10, 10, 0.5).toArray().map(function (x) {
-                        return compile(fx).evaluate({ x: x })
-                    }),
-                    type: 'scatter',
-                    marker: { color: 'red' },
-                },
-            ]}
-            layout={{ title: title }}
+        <PlotlyChart data={data}
+                     layout={layout}
+                 
         />
-    )
+    );
 }
