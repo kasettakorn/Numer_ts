@@ -1,7 +1,5 @@
 import { Card, Input, Button } from 'antd';
-import { det } from 'mathjs';
 import { ReactElement, useState } from 'react'
-import Graph from '../../components/Graph.component';
 
 interface IDimentionInput {
     row: number,
@@ -15,7 +13,7 @@ interface IOutput {
 }
 
 var A: number[][] = [], B: number[] = [], answer: string[] = [], matrixA: ReactElement[] = [], matrixB: ReactElement[] = []
-export default function Gauss() {
+export default function Jordan() {
 
     const [dimention, setDimention] = useState<IDimentionInput>({
         row: 0,
@@ -71,7 +69,7 @@ export default function Gauss() {
         }
     }
 
-    const gauss_eliminate = () => {
+    const jordan = () => {
         initMatrix();
         let n = dimention.col;
         if (A[0][0] === 0) { //pivoting
@@ -92,27 +90,40 @@ export default function Gauss() {
                 B[i] = B[i] - factor * B[k];
             }
         }
-        
+
         //Backward Substitution
-        let X = new Array(n);
-        X[n - 1] = Math.round(B[n - 1] / A[n - 1][n - 1]); //find Xn
-        for (i = n - 2; i >= 0; i--) { //find Xn-1 to X1
-            var sum = B[i];
-            for (j = i + 1; j < n; j++) {
-                sum = sum - A[i][j] * X[j];
+        for (k = n - 1; k >= 0; k--) {
+            for (i = k; i >= 0; i--) {
+
+                if (i === k) {//Identity matrix
+                    factor = 1 / A[i][k];
+
+                    for (j = 0; j < n; j++) {
+                        A[i][j] = A[i][j] * factor;
+                    }
+                    B[i] = B[i] * factor;
+
+
+                }
+                else {
+                    factor = A[i][k] / A[k][k];
+                    for (j = 0; j < n; j++) {
+                        A[i][j] = A[i][j] - factor * A[k][j];
+                    }
+                    B[i] = B[i] - factor * B[k];
+                }
             }
-            X[i] = Math.round(sum / A[i][i]);
         }
         for (i = 0; i < n; i++) {
-            answer.push("x" + (i + 1) + " = " + X[i] + "\n");
+            answer.push("x" + (i + 1) + " = " + B[i] + "\n");
         }
         setShowOutput(true);
-        
+
     }
 
     return (
         <div style={{ background: "#FFFF", padding: "30px" }}>
-            <h2 style={{ color: "black", fontWeight: "bold" }}>Gauss's Elimination</h2>
+            <h2 style={{ color: "black", fontWeight: "bold" }}>Gauss Jordan</h2>
             <div className="row">
                 {!showInput && <div className="offset-md-1 col-4">
                     <Card
@@ -147,7 +158,7 @@ export default function Gauss() {
                                 <h3 style={{ color: "white" }}>Vector [B]</h3>{matrixB}
                             </div>
                         }
-                        <Button block type="primary" id="submit_button" onClick={() => gauss_eliminate()}>Submit</Button>
+                        <Button block type="primary" id="submit_button" onClick={() => jordan()}>Submit</Button>
                     </Card>
                 </div>}
                 <div className="col-6 offset-md-1">
