@@ -1,9 +1,10 @@
 import './App.css';
 import { Layout, Menu } from 'antd';
-import { BookFilled, CaretDownFilled, FacebookFilled } from '@ant-design/icons';
+import { CaretDownFilled } from '@ant-design/icons';
 import { Routes, Route, Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { Bisection } from './calculation/Root of equation';
+import { Bisection, FalsePosition, NewtonRaphson, Onepoint, Secant } from './calculation/Root of equation';
+import { Cramer } from './calculation/Linear Algaebra';
 
 const { Header, Content, Footer } = Layout;
 export default function App() {
@@ -14,13 +15,13 @@ export default function App() {
                     <Menu theme='dark' style={{ backgroundColor: "" }} mode='horizontal'>
                         <Menu.SubMenu key="unit1" title={<span>Root of Equation <CaretDownFilled /></span>}>
                             <Menu.Item key={1}><Link to='/bisection'>Bisection</Link></Menu.Item>
-                            <Menu.Item key={2}>False Position</Menu.Item>
-                            <Menu.Item key={3}>One-Point iteration</Menu.Item>
-                            <Menu.Item key={4}>Newton Raphson</Menu.Item>
-                            <Menu.Item key={5}>Secant</Menu.Item>
+                            <Menu.Item key={2}><Link to='/falseposition'>False Position</Link></Menu.Item>
+                            <Menu.Item key={3}><Link to='/onepoint'>One-Point iteration</Link></Menu.Item>
+                            <Menu.Item key={4}><Link to='/newton-raphson'>Newton Raphson</Link></Menu.Item>
+                            <Menu.Item key={5}><Link to="/secant">Secant</Link></Menu.Item>
                         </Menu.SubMenu>
                         <Menu.SubMenu key="unit2" title={<span>Linear Algebra <CaretDownFilled /></span>}>
-                            <Menu.Item key={6}>Cramer's Rule</Menu.Item>
+                            <Menu.Item key={6}><Link to='/cramer'>Cramer's Rule</Link></Menu.Item>
                             <Menu.Item key={7}>Gauss's Elimination</Menu.Item>
                             <Menu.Item key={8}>Gauss Jordan</Menu.Item>
                             <Menu.Item key={9}>LU Decomposition</Menu.Item>
@@ -58,6 +59,11 @@ export default function App() {
                     >
                         <Routes>
                             <Route path="/bisection" element={<Bisection />} />
+                            <Route path="/falseposition" element={<FalsePosition />} />
+                            <Route path="/onepoint" element={<Onepoint />} />
+                            <Route path="/newton-raphson" element={<NewtonRaphson />} />
+                            <Route path="/secant" element={<Secant />} />
+                            <Route path="/cramer" element={<Cramer />} />
                         </Routes>
 
                     </Content>

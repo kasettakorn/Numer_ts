@@ -17,7 +17,7 @@ export default function Graph({ fx, title } : GraphProp) {
                         return compile(fx).evaluate({ x: x })
                     }),
                     type: 'scatter',
-                    marker: { color: 'red' },
+                    marker: { color: 'green' },
                 },
             ]}
             layout={{ title: title }}

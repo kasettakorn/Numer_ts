@@ -19,7 +19,7 @@ interface IOutput {
 }
 
 var outputTable : IOutput[] = []
-function Bisection()  {
+function FalsePosition()  {
     const [input, setInput] = useState<IInput>({
         FX: "",
         XL: 0,
@@ -29,35 +29,35 @@ function Bisection()  {
     const [showOutput, setShowOutput] = useState(false);
     const [showGraph, setShowGraph] = useState(false);
         
-    const bisection = () => {
+    const false_position = () => {
         outputTable = []
 
         const { FX, XL, XR } = input;
 
         var xl = XL, xr = XR
-        var xm = 0;
+        var xi = 0;
         var sum = 0;
 
         do {
-            xm = (xl + xr) / 2;
+            xi = (xl * func({fx: FX, X: xr.toString()}) - xr * func({fx: FX, X: xl.toString()})) / (func({fx: FX, X: xr.toString()}) - func({fx: FX, X: xl.toString()}))
             
-            if (func({fx: FX, X: xm.toString()}) * func({fx: FX, X: xr.toString()}) < 0) {
-                sum = error({xnew: xm, xold: xr});
-                xl = xm;
+            if (func({fx: FX, X: xi.toString()}) * func({fx: FX, X: xr.toString()}) < 0) {
+                sum = error({xnew: xi, xold: xr});
+                xl = xi;
             }
             else {
-                sum = error({xnew: xm, xold: xl});
-                xr = xm
+                sum = error({xnew: xi, xold: xl});
+                xr = xi
             }
         
             outputTable.push({
                 i: outputTable.length+1,
                 XL: xl.toFixed(5),
                 XR: xr.toFixed(5),
-                X: xm.toFixed(8),
+                X: xi.toFixed(8),
                 Error: Math.abs(sum).toFixed(8)
             })
-        } while (Math.abs(sum) > 0.000001);
+        } while (/**/ outputTable.length < 50 && Math.abs(sum) > 0.000001);
 
         setShowOutput(true);
         setShowGraph(true);
@@ -65,7 +65,7 @@ function Bisection()  {
 
     return (
         <div style={{ background: "#FFFF", padding: "30px" }}>
-            <h2 style={{ color: "black", fontWeight: "bold" }}>Bisection</h2>
+            <h2 style={{ color: "black", fontWeight: "bold" }}>False Position</h2>
             <div className="row">
                 <div className="offset-md-1 col-4">
                     <Card
@@ -92,11 +92,11 @@ function Bisection()  {
                                 XR: Number(e.target.value)
                             })
                         }}></Input><br /><br />
-                        <Button block type="primary" id="submit_button" onClick={() => bisection()}>Submit</Button>
+                        <Button block type="primary" id="submit_button" onClick={() => false_position()}>Submit</Button>
                     </Card>
                 </div>
                 <div className="col-6 offset-md-1">
-                    {showGraph && <Graph fx={input.FX} title="Bisection Method" />}
+                    {showGraph && <Graph fx={input.FX} title="False Position Method" />}
                 </div>
             </div>
             <div className="row">
@@ -114,4 +114,4 @@ function Bisection()  {
     );
 }
 
-export default Bisection;
+export default FalsePosition;

@@ -16,8 +16,26 @@ export const columns = [
     },
     {
         title: "X",
-        dataIndex: "XR",
-        key: "XR"
+        dataIndex: "X",
+        key: "X"
+    },
+    {
+        title: "Error",
+        key: "Error",
+        dataIndex: "Error"
+    }
+];
+
+export const onepointColumn = [
+    {
+        title: "Iteration",
+        dataIndex: "i",
+        key: "i",
+    },
+    {
+        title: "X",
+        dataIndex: "X",
+        key: "X"
     },
     {
         title: "Error",
