@@ -14,8 +14,8 @@ interface IOutput {
     arr: number
 }
 
-var A: number[][] = [], B: number[] = [], answer: ReactElement[] = [], matrixA: ReactElement[] = [], matrixB: ReactElement[] = []
-export default function Cramer() {
+var A: number[][] = [], B: number[] = [], answer: string[] = [], matrixA: ReactElement[] = [], matrixB: ReactElement[] = []
+export default function Gauss() {
 
     const [dimention, setDimention] = useState<IDimentionInput>({
         row: 0,
@@ -71,27 +71,41 @@ export default function Cramer() {
         }
     }
 
-    const cramer = () => {
+    const gauss_eliminate = () => {
         initMatrix();
-        var counter = 0;
-
-        while (counter != dimention.row) {
-            var transformMatrix = JSON.parse(JSON.stringify(A)); //Deep copy
-            for (var i = 0; i < dimention.row; i++) {
-                for (var j = 0; j < dimention.col; j++) {
-                    if (j === counter) {
-                        transformMatrix[i][j] = B[i]
-                        break;
-                    }
-
-                }
-
-            }
-            counter++;
-            answer.push(<h2 style={{color:"white"}}>X<sub>{counter}</sub> =&nbsp;&nbsp;{Math.round(det(transformMatrix)) / Math.round(det(A))}</h2>)
-            answer.push(<br />)
-
+        let n = dimention.col;
+        if (A[0][0] === 0) { //pivoting
+            var tempRow = JSON.parse(JSON.stringify(A[0]));
+            var tempColumn = B[0];
+            A[0] = A[1];
+            A[1] = tempRow;
+            B[0] = B[1];
+            B[1] = tempColumn;
         }
+        //Forward eliminated
+        for (var k = 0; k < n; k++) {
+            for (var i = k + 1; i < n; i++) {
+                var factor = A[i][k] / A[k][k];
+                for (var j = k; j < n; j++) {
+                    A[i][j] = A[i][j] - factor * A[k][j];
+                }
+                B[i] = B[i] - factor * B[k];
+            }
+        }
+        //Backward Substitution
+        let X = new Array(n);
+        X[n - 1] = Math.round(B[n - 1] / A[n - 1][n - 1]); //find Xn
+        for (i = n - 2; i >= 0; i--) { //find Xn-1 to X1
+            var sum = B[i];
+            for (j = i + 1; j < n; j++) {
+                sum = sum - A[i][j] * X[j];
+            }
+            X[i] = Math.round(sum / A[i][i]);
+        }
+        for (i = 0; i < n; i++) {
+            answer.push("x" + (i + 1) + " = " + X[i] + "\n");
+        }
+
         setShowOutput(true);
     }
 
@@ -132,7 +146,7 @@ export default function Cramer() {
                                 <h3 style={{ color: "white" }}>Vector [B]</h3>{matrixB}
                             </div>
                         }
-                        <Button block type="primary" id="submit_button" onClick={() => cramer()}>Submit</Button>
+                        <Button block type="primary" id="submit_button" onClick={() => gauss_eliminate()}>Submit</Button>
                     </Card>
                 </div>}
                 <div className="col-6 offset-md-1">
