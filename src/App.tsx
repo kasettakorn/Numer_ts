@@ -4,7 +4,7 @@ import { CaretDownFilled } from '@ant-design/icons';
 import { Routes, Route, Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { Bisection, FalsePosition, NewtonRaphson, Onepoint, Secant } from './calculation/Root of equation';
-import { Cramer, Gauss, Jordan } from './calculation/Linear Algaebra';
+import { Cramer, Gauss, Jordan, LU } from './calculation/Linear Algaebra';
 
 const { Header, Content, Footer } = Layout;
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
                             <Menu.Item key={6}><Link to='/cramer'>Cramer's Rule</Link></Menu.Item>
                             <Menu.Item key={7}><Link to='/gauss'>Gauss's Elimination</Link></Menu.Item>
                             <Menu.Item key={8}><Link to='/jordan'>Gauss Jordan</Link></Menu.Item>
-                            <Menu.Item key={9}>LU Decomposition</Menu.Item>
+                            <Menu.Item key={9}><Link to='/lu'>LU Decomposition</Link></Menu.Item>
                             <Menu.Item key={10}>Cholesky Decomposition</Menu.Item>
                             <Menu.Item key={11}>Jacobi Iteration</Menu.Item>
                             <Menu.Item key={12}>Gauss-Seidel Iteration</Menu.Item>
@@ -66,6 +66,7 @@ export default function App() {
                             <Route path="/cramer" element={<Cramer />} />
                             <Route path="/gauss" element={<Gauss />} />
                             <Route path="/jordan" element={<Jordan />} />
+                            <Route path="/lu" element={<LU />} />
                         </Routes>
 
                     </Content>
