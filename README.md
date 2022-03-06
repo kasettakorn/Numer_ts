@@ -13,7 +13,7 @@
 
 ## 📝 Table of Contents
 - Root of Equation
-- Linear Algebra
+- Linear Algebra<br/>
 Coming soon ...
 - Interpolation
 - Regression
